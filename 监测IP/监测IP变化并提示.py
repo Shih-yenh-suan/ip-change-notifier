@@ -1,12 +1,15 @@
 import smtplib
 import socket
 import json
+import os
 
 # 设置文档路径来保存上次的IP地址
 ip_file_path = "previous_ip.txt"
 
 # 加载邮件配置信息
-with open('config.json', 'r') as config_file:
+cnfgFilePath = os.path.dirname(__file__)
+
+with open(os.path.join(cnfgFilePath, 'config.json')) as config_file:
     config = json.load(config_file)
 
 smtp_server = config['smtp_server']
@@ -14,9 +17,9 @@ smtp_username = config['smtp_username']
 smtp_password = config['smtp_password']
 to_mail = config['to_mail']
 
-# 定义发送邮件函数
-def send_email(new_ip):
 
+def send_email(new_ip):
+    '''定义发送邮件函数'''
     # 构建邮件内容
     subject = f"{smtp_username}"
     body = f"New IP: {new_ip}"
@@ -31,6 +34,7 @@ def send_email(new_ip):
         print("邮件已发送")
     except Exception as e:
         print(f"邮件发送失败: {str(e)}")
+
 
 # 获取当前IP地址
 current_ip = socket.gethostbyname(socket.gethostname())
